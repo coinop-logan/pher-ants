@@ -6,6 +6,26 @@ import (
   "github.com/faiface/pixel/pixelgl"
 )
 
+var selectedTiles []*tile
+
+func handleInput(win *pixelgl.Window) {
+  
+  if win.JustPressed(pixelgl.MouseButton1) {
+    t := gameMap.getTileAtPos(win.MousePosition())
+    selectedTiles = append(selectedTiles, t)
+  } else if win.JustPressed(pixelgl.MouseButton2) {
+    mc := new(moveCommand)
+    mc.target = win.MousePosition()
+    for i := 0; i < len(selectedTiles); i++ {
+      selectedTiles[i].pher = pheremone{command:mc}
+    }
+  }
+
+  if win.JustPressed(pixelgl.KeyEscape) {
+    selectedTiles = nil
+  }
+}
+
 func drawTileHighlight(win *pixelgl.Window) {
   t := gameMap.getTileAtPos(win.MousePosition())
 

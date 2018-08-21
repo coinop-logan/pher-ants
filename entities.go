@@ -18,9 +18,9 @@ const (
   RIGHT =     6
   UPRIGHT =   7
 
-  ANT_TURNING_SPEED =      0.1
+  ANT_TURNING_SPEED =      0.03
   ANT_SPEED_ACCELERATION = 0.1
-  ANT_SPEED_MAX =          0.1
+  ANT_SPEED_MAX =          1.0
 )
 
 type drawable interface {
