@@ -1,6 +1,7 @@
 package main
 
 import (
+  //"fmt"
   //"log"
   "math"
   "github.com/faiface/pixel"
@@ -54,13 +55,17 @@ func (cmd *moveCommand) controlAnt(ant *ant) {
   ant.moveToward(cmd.target)
 }
 
+func (ant *ant) getAngleUnitVec() pixel.Vec {
+  return pixel.V(math.Cos(ant.angle), math.Sin(ant.angle))
+}
+
 func (ant *ant) moveToward(targetPos pixel.Vec) {
   //turn
   angleToTarget := targetPos.Sub(ant.pos).Angle()
   ant.turnTowardAngle(angleToTarget)
 
   //move
-  if math.Cos(angleToTarget) < 0 {
+  if math.Cos(angleToTarget) > 0 {
     ant.moveForward()
   }
 }
@@ -78,13 +83,16 @@ func (ant *ant) turnTowardAngle(targetAngle float64) {
 }
 
 func (ant *ant) iterate() error {
-  onTile := gameMap.posToTile(ant.pos)
+  onTile := gameMap.getTileAtPos(ant.pos)
 
-  onTile.pher.command.controlAnt(ant)
+  if onTile.pher.command != nil {
+    onTile.pher.command.controlAnt(ant)
+  }
 
   if ant.speed > ANT_SPEED_MAX {
     ant.speed = ANT_SPEED_MAX
   }
+  ant.pos = ant.pos.Add(ant.getAngleUnitVec().Scaled(ant.speed))
 
   return nil
 }

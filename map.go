@@ -37,7 +37,7 @@ func (m *gameMapType) init() {
   }
 }
 
-func (m *gameMapType) posToTile(pos pixel.Vec) *tile {
+func (m *gameMapType) getTileAtPos(pos pixel.Vec) *tile {
   tileCol := uint16(math.Floor(pos.X / float64(TILE_WIDTH)))
   tileRow := uint16(math.Floor(pos.Y / float64(TILE_WIDTH)))
   return &m.tiles[tileCol][tileRow]
@@ -48,7 +48,7 @@ func (t *tile) centerPos() (pixel.Vec) {
 }
 
 func (t *tile) originPos() (pixel.Vec) {
-  return t.getRect().Min
+  return pixel.V(float64(t.col), float64(t.row)).Scaled(float64(TILE_WIDTH))
 }
 
 func (m *gameMapType) drawGrid(t pixel.Target) {

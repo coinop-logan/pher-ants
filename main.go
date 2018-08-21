@@ -39,16 +39,28 @@ func run() {
   gameEntities = append(gameEntities, &newAnt)
 
 	for !win.Closed() {
+    if win.JustPressed(pixelgl.MouseButton1) {
+      t := gameMap.getTileAtPos(win.MousePosition())
+      mc := new(moveCommand)
+      mc.target = pixel.V(200,20)
+      t.pher = pheremone{command:mc}
+    }
+
+    for i := 0; i<len(gameEntities); i++ {
+      gameEntities[i].iterate()
+    }
+
     //background
     win.Clear(colornames.Forestgreen)
 
-    //grid
-    gameMap.drawGrid(win)
+    //gameMap.drawGrid(win)
 
     //entities
     for i := 0; i<len(gameEntities); i++ {
       gameEntities[i].draw(win)
     }
+
+    drawTileHighlight(win)
 
 		win.Update()
 
