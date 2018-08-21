@@ -1,6 +1,8 @@
 package main
 
 import (
+  "fmt"
+  "log"
   "github.com/faiface/pixel"
   "github.com/faiface/pixel/imdraw"
   "github.com/faiface/pixel/pixelgl"
@@ -8,21 +10,32 @@ import (
 
 var selectedTiles []*tile
 
+var cmd command
+
 func handleInput(win *pixelgl.Window) {
-  
+
   if win.JustPressed(pixelgl.MouseButton1) {
     t := gameMap.getTileAtPos(win.MousePosition())
     selectedTiles = append(selectedTiles, t)
   } else if win.JustPressed(pixelgl.MouseButton2) {
-    mc := new(moveCommand)
-    mc.target = win.MousePosition()
-    for i := 0; i < len(selectedTiles); i++ {
-      selectedTiles[i].pher = pheremone{command:mc}
+    if cmd != nil {
+      cmd.rightClick(win.MousePosition())
+      for i := 0; i < len(selectedTiles); i++ {
+        selectedTiles[i].pher = pheremone{command:cmd}
+      }
     }
   }
 
   if win.JustPressed(pixelgl.KeyEscape) {
-    selectedTiles = nil
+    if selectedTiles != nil {
+      selectedTiles = nil
+    } else {
+      cmd = nil
+      log.Output(1, fmt.Sprintf("%v", cmd))
+    }
+  }
+  if win.JustPressed(pixelgl.KeyQ) {
+    cmd = new(moveCommand)
   }
 }
 
