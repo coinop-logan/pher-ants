@@ -5,7 +5,6 @@ import (
   "time"
   //"log"
 
-  //"github.com/golang/freetype/truetype"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
   //"github.com/faiface/pixel/text"

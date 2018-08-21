@@ -14,9 +14,13 @@ const (
 )
 
 type tile struct {
-  x, y uint16
+  col, row uint16
   pher pheremone
   ant *ant
+}
+
+func (t *tile) getRect() pixel.Rect {
+  return pixel.R(float64(t.col*TILE_WIDTH), float64(t.row*TILE_WIDTH), float64((t.col+1)*TILE_WIDTH), float64((t.row+1)*TILE_WIDTH))
 }
 
 type gameMapType struct {
@@ -26,8 +30,9 @@ type gameMapType struct {
 func (m *gameMapType) init() {
   for col := uint16(0); col < MAP_WIDTH_IN_TILES; col++ {
     for row := uint16(0); row < MAP_WIDTH_IN_TILES; row++ {
-      m.tiles[col][row].x = col
-      m.tiles[col][row].y = row
+      t := &m.tiles[col][row]
+      t.col = col
+      t.row = row
     }
   }
 }
@@ -39,11 +44,11 @@ func (m *gameMapType) posToTile(pos pixel.Vec) *tile {
 }
 
 func (t *tile) centerPos() (pixel.Vec) {
-  return pixel.V(float64(t.x*TILE_WIDTH) + float64(TILE_WIDTH/2), float64(t.y)*TILE_WIDTH + float64(TILE_WIDTH/2))
+  return t.getRect().Center()
 }
 
 func (t *tile) originPos() (pixel.Vec) {
-  return pixel.V(float64(t.x*TILE_WIDTH), float64(t.y*TILE_WIDTH))
+  return t.getRect().Min
 }
 
 func (m *gameMapType) drawGrid(t pixel.Target) {
