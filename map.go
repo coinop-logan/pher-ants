@@ -1,8 +1,8 @@
 package main
 
 import (
-  "fmt"
-  "log"
+  //"fmt"
+  //"log"
   "math"
   "github.com/faiface/pixel"
   "github.com/faiface/pixel/imdraw"
@@ -47,7 +47,6 @@ func (t *tile) originPos() (pixel.Vec) {
 }
 
 func (m *gameMapType) drawGrid(t pixel.Target) {
-  log.Output(1, "drawing grid")
   for i := 0; i<MAP_WIDTH_IN_TILES; i++ {
     fromPoint1 := m.tiles[0][i].originPos()
     toPoint1 := fromPoint1.Add(pixel.V(TILE_WIDTH*MAP_WIDTH_IN_TILES, 0))

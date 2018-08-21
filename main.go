@@ -1,9 +1,9 @@
 package main
 
 import (
-  "fmt"
+  //"fmt"
   "time"
-  "log"
+  //"log"
 
   //"github.com/golang/freetype/truetype"
 	"github.com/faiface/pixel"
@@ -58,6 +58,5 @@ func run() {
 }
 
 func main() {
-  log.Output(1, fmt.Sprintf("%v", gameMap.tiles[0][0].x))
 	pixelgl.Run(run)
 }
