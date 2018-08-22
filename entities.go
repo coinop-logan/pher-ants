@@ -1,11 +1,10 @@
 package main
 
 import (
-  "fmt"
-  "log"
+  //"fmt"
+  //"log"
   "math"
   "github.com/faiface/pixel"
-  "github.com/faiface/pixel/imdraw"
 )
 
 const (
@@ -23,10 +22,6 @@ const (
   ANT_BRAKE_DECELERATION =   0.2
   ANT_SPEED_MAX =            1.0
 )
-
-type drawable interface {
-  draw(t pixel.Target)
-}
 
 type gameEntity interface {
   drawable
@@ -69,7 +64,6 @@ func (ant *ant) getAngleUnitVec() pixel.Vec {
 func (ant *ant) moveToward(targetPos pixel.Vec) {
   //turn
   angleToTarget := targetPos.Sub(ant.pos).Angle()
-  log.Output(1, fmt.Sprintf("%v,%v",targetPos,angleToTarget))
   ant.turnTowardAngle(angleToTarget)
 
   //move
@@ -117,18 +111,4 @@ func (ant *ant) iterate() error {
   ant.pos = ant.pos.Add(ant.getAngleUnitVec().Scaled(ant.speed))
 
   return nil
-}
-
-func (ant *ant) draw(t pixel.Target) {
-  //TODO: this should be executed elsewhere, perhaps? Just once? And re-use the imd
-  imd := imdraw.New(nil)
-
-  imd.Color = pixel.RGB(0,0,1)
-  imd.Push(pixel.V(0,   1   ).Scaled(10).Add(ant.pos),
-           pixel.V(-0.5,-1  ).Scaled(10).Add(ant.pos),
-           pixel.V(0,   -0.5).Scaled(10).Add(ant.pos),
-           pixel.V(0.5, -1  ).Scaled(10).Add(ant.pos))
-  imd.Polygon(0)
-
-  imd.Draw(t)
 }

@@ -26,6 +26,8 @@ func run() {
 		panic(err)
 	}
 
+  generatePictures()
+
   fps := time.Tick(time.Second / 120)
 
   gameMap.init()
