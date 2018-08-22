@@ -5,7 +5,7 @@ import (
   //"log"
   "math"
   "github.com/faiface/pixel"
-  "github.com/faiface/pixel/imdraw"
+  //"github.com/faiface/pixel/imdraw"
 )
 
 const (
@@ -51,22 +51,11 @@ func (t *tile) originPos() (pixel.Vec) {
   return pixel.V(float64(t.col), float64(t.row)).Scaled(float64(TILE_WIDTH))
 }
 
-func (m *gameMapType) drawGrid(t pixel.Target) {
-  for i := 0; i<MAP_WIDTH_IN_TILES; i++ {
-    fromPoint1 := m.tiles[0][i].originPos()
-    toPoint1 := fromPoint1.Add(pixel.V(TILE_WIDTH*MAP_WIDTH_IN_TILES, 0))
+func (m *gameMapType) getBoundsFromTiles(t1, t2 *tile) (uint16, uint16, uint16, uint16) {
+  minCol := min(t1.col, t2.col)
+  maxCol := max(t1.col, t2.col)
+  minRow := min(t1.row, t2.row)
+  maxRow := max(t1.row, t2.row)
 
-    fromPoint2 := m.tiles[i][0].originPos()
-    toPoint2 := fromPoint2.Add(pixel.V(0, TILE_WIDTH*MAP_WIDTH_IN_TILES))
-
-    imd := imdraw.New(nil)
-
-    imd.Color = pixel.RGB(0.5, 0.5, 0.5)
-    imd.Push(fromPoint1, toPoint1)
-    imd.Line(1)
-    imd.Push(fromPoint2, toPoint2)
-    imd.Line(1)
-
-    imd.Draw(t)
-  }
+  return minCol,maxCol,minRow,maxRow
 }
