@@ -4,6 +4,7 @@ import (
   "github.com/faiface/pixel"
   "github.com/faiface/pixel/pixelgl"
   "github.com/faiface/pixel/imdraw"
+  "golang.org/x/image/colornames"
 )
 
 var (
@@ -22,11 +23,23 @@ func generatePictures() {
 
   highlightedTileCanvas = pixelgl.NewCanvas(tileRect)
 
-  imd.Color = pixel.RGBA{0,0,1,0.5}
+  imd.Color = pixel.RGBA{0,1,0,0.5}
   imd.Push(tileRect.Min, tileRect.Max)
   imd.Rectangle(0)
 
   imd.Draw(highlightedTileCanvas)
+
+  //selectedTile
+
+  imd.Clear()
+
+  selectedTileCanvas = pixelgl.NewCanvas(tileRect)
+
+  imd.Color = pixel.RGBA{0,0,1,0.5}
+  imd.Push(tileRect.Min, tileRect.Max)
+  imd.Rectangle(0)
+
+  imd.Draw(selectedTileCanvas)
 
   //ant
 
@@ -48,12 +61,34 @@ type drawable interface {
   draw(t pixel.Target)
 }
 
+func drawStuff(win *pixelgl.Window) {
+  //background
+  win.Clear(colornames.Forestgreen)
+
+  //gameMap.drawGrid(win)
+
+  //entities
+  for i := 0; i<len(gameEntities); i++ {
+    gameEntities[i].draw(win)
+  }
+
+  drawHighlightedTile(win)
+  drawSelectedTiles(win)
+
+  win.Update()
+}
+
 func (ant *ant) draw(t pixel.Target) {
   antCanvas.Draw(t, pixel.IM.Rotated(pixel.ZV, ant.angle).Moved(ant.pos))
 }
 
-func drawTileHighlight(win *pixelgl.Window) {
-  ti := gameMap.getTileAtPos(win.MousePosition())
+func drawHighlightedTile(t pixel.Target) {
+  ti := highlightedTile
+  highlightedTileCanvas.Draw(t, pixel.IM.Moved(ti.centerPos()))
+}
 
-  highlightedTileCanvas.Draw(win, pixel.IM.Moved(ti.centerPos()))
+func drawSelectedTiles(t pixel.Target) {
+  for _, ti := range(selectedTiles) {
+    selectedTileCanvas.Draw(t, pixel.IM.Moved(ti.centerPos()))
+  }
 }

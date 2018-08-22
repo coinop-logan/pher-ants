@@ -7,14 +7,12 @@ import (
 
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
-  //"github.com/faiface/pixel/text"
-  //"github.com/faiface/pixel/imdraw"
-  //"golang.org/x/image/font/basicfont"
-  //"golang.org/x/image/font"
-  "golang.org/x/image/colornames"
 )
 
-var gameMap gameMapType
+var (
+  gameMap gameMapType
+  gameEntities []gameEntity
+)
 
 func run() {
 	cfg := pixelgl.WindowConfig{
@@ -32,8 +30,6 @@ func run() {
 
   gameMap.init()
 
-  var gameEntities []gameEntity
-
   newAnt := ant{
     pos: pixel.V(50,50),
   }
@@ -47,19 +43,7 @@ func run() {
       gameEntities[i].iterate()
     }
 
-    //background
-    win.Clear(colornames.Forestgreen)
-
-    //gameMap.drawGrid(win)
-
-    //entities
-    for i := 0; i<len(gameEntities); i++ {
-      gameEntities[i].draw(win)
-    }
-
-    drawTileHighlight(win)
-
-		win.Update()
+    drawStuff(win)
 
     <-fps
 	}

@@ -6,11 +6,15 @@ import (
   "github.com/faiface/pixel/pixelgl"
 )
 
-var selectedTiles []*tile
+var (
+  highlightedTile *tile
+  selectedTiles []*tile
+)
 
 var cmd command
 
 func handleInput(win *pixelgl.Window) {
+  highlightedTile = gameMap.getTileAtPos(win.MousePosition())
 
   if win.JustPressed(pixelgl.MouseButton1) {
     t := gameMap.getTileAtPos(win.MousePosition())
