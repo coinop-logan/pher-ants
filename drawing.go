@@ -6,13 +6,31 @@ import (
   "github.com/faiface/pixel/imdraw"
 )
 
-var antCanvas *pixelgl.Canvas
+var (
+  selectedTileCanvas *pixelgl.Canvas
+  highlightedTileCanvas *pixelgl.Canvas
+  antCanvas *pixelgl.Canvas
+)
 
 func generatePictures() {
 
   imd := imdraw.New(nil)
 
+  //highlightedTile
+
+  tileRect := pixel.R(0,0,TILE_WIDTH,TILE_WIDTH)
+
+  highlightedTileCanvas = pixelgl.NewCanvas(tileRect)
+
+  imd.Color = pixel.RGBA{0,0,1,0.5}
+  imd.Push(tileRect.Min, tileRect.Max)
+  imd.Rectangle(0)
+
+  imd.Draw(highlightedTileCanvas)
+
   //ant
+
+  imd.Clear()
 
   antCanvas = pixelgl.NewCanvas(pixel.R(0,0,16,16))
 
@@ -24,8 +42,6 @@ func generatePictures() {
   imd.Polygon(0)
 
   imd.Draw(antCanvas)
-
-  imd.Clear()
 }
 
 type drawable interface {
@@ -34,4 +50,10 @@ type drawable interface {
 
 func (ant *ant) draw(t pixel.Target) {
   antCanvas.Draw(t, pixel.IM.Rotated(pixel.ZV, ant.angle).Moved(ant.pos))
+}
+
+func drawTileHighlight(win *pixelgl.Window) {
+  ti := gameMap.getTileAtPos(win.MousePosition())
+
+  highlightedTileCanvas.Draw(win, pixel.IM.Moved(ti.centerPos()))
 }
