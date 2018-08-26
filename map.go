@@ -8,6 +8,10 @@ import (
   //"github.com/faiface/pixel/imdraw"
 )
 
+func init() {
+  gameMap.init()
+}
+
 const (
   TILE_WIDTH = 32
   MAP_WIDTH_IN_TILES = 1024

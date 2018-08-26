@@ -9,6 +9,10 @@ import (
   "golang.org/x/image/colornames"
 )
 
+func init() {
+  generatePictures()
+}
+
 var (
   selectedTileCanvas *pixelgl.Canvas
   highlightedTileCanvas *pixelgl.Canvas

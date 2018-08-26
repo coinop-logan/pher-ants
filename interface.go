@@ -19,7 +19,9 @@ func handleInput(win *pixelgl.Window) {
   tileAtMouse := gameMap.getTileAtPos(win.MousePosition())
 
   if win.JustPressed(pixelgl.MouseButton1) {
-    if ! (win.Pressed(pixelgl.KeyLeftShift) || win.Pressed(pixelgl.KeyRightShift)) {
+    if win.Pressed(pixelgl.KeyLeftControl) || win.Pressed(pixelgl.KeyRightControl) {
+
+    } else if ! (win.Pressed(pixelgl.KeyLeftShift) || win.Pressed(pixelgl.KeyRightShift)) {
       selectedTiles = nil
     }
   }

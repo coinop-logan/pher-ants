@@ -24,11 +24,7 @@ func run() {
 		panic(err)
 	}
 
-  generatePictures()
-
   fps := time.Tick(time.Second / 120)
-
-  gameMap.init()
 
   newAnt := ant{
     pos: pixel.V(50,50),
