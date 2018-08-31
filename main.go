@@ -14,37 +14,37 @@ var (
   gameEntities []gameEntity
 )
 
-func run() {
-	cfg := pixelgl.WindowConfig{
-		Title:  "Pixel Rocks!",
-		Bounds: pixel.R(0, 0, 1024, 768),
-	}
-	win, err := pixelgl.NewWindow(cfg)
-	if err != nil {
-		panic(err)
-	}
+func main() {
+	pixelgl.Run(func() {
+  	cfg := pixelgl.WindowConfig{
+  		Title:  "Pixel Rocks!",
+  		Bounds: pixel.R(0, 0, 1024, 768),
+  	}
+  	win, err := pixelgl.NewWindow(cfg)
+  	if err != nil {
+  		panic(err)
+  	}
 
-  fps := time.Tick(time.Second / 120)
+    generatePictures()
 
-  newAnt := ant{
-    pos: pixel.V(50,50),
-  }
+    fps := time.Tick(time.Second / 120)
 
-  gameEntities = append(gameEntities, &newAnt)
-
-	for !win.Closed() {
-    handleInput(win)
-
-    for i := 0; i<len(gameEntities); i++ {
-      gameEntities[i].iterate()
+    newAnt := ant{
+      pos: pixel.V(50,50),
     }
 
-    drawStuff(win)
+    gameEntities = append(gameEntities, &newAnt)
 
-    <-fps
-	}
-}
+  	for !win.Closed() {
+      handleInput(win)
 
-func main() {
-	pixelgl.Run(run)
+      for i := 0; i<len(gameEntities); i++ {
+        gameEntities[i].iterate()
+      }
+
+      drawStuff(win)
+
+      <-fps
+  	}
+  })
 }
