@@ -2,7 +2,7 @@ package main
 
 import (
   //"fmt"
-  //"log"
+  "log"
   "math"
   "github.com/faiface/pixel"
   //"github.com/faiface/pixel/imdraw"
@@ -10,6 +10,7 @@ import (
 
 func init() {
   gameMap.init()
+  log.Output(1, "map init'd")
 }
 
 const (
@@ -23,14 +24,6 @@ type tile struct {
   ant *ant
 }
 
-func (t *tile) getRect() pixel.Rect {
-  return pixel.R(float64(t.col*TILE_WIDTH), float64(t.row*TILE_WIDTH), float64((t.col+1)*TILE_WIDTH), float64((t.row+1)*TILE_WIDTH))
-}
-
-type gameMapType struct {
-  tiles [MAP_WIDTH_IN_TILES][MAP_WIDTH_IN_TILES]tile
-}
-
 func (m *gameMapType) init() {
   for col := uint16(0); col < MAP_WIDTH_IN_TILES; col++ {
     for row := uint16(0); row < MAP_WIDTH_IN_TILES; row++ {
@@ -41,10 +34,8 @@ func (m *gameMapType) init() {
   }
 }
 
-func (m *gameMapType) getTileAtPos(pos pixel.Vec) *tile {
-  tileCol := uint16(math.Floor(pos.X / float64(TILE_WIDTH)))
-  tileRow := uint16(math.Floor(pos.Y / float64(TILE_WIDTH)))
-  return &m.tiles[tileCol][tileRow]
+func (t *tile) getRect() pixel.Rect {
+  return pixel.R(float64(t.col*TILE_WIDTH), float64(t.row*TILE_WIDTH), float64((t.col+1)*TILE_WIDTH), float64((t.row+1)*TILE_WIDTH))
 }
 
 func (t *tile) centerPos() (pixel.Vec) {
@@ -53,6 +44,31 @@ func (t *tile) centerPos() (pixel.Vec) {
 
 func (t *tile) originPos() (pixel.Vec) {
   return pixel.V(float64(t.col), float64(t.row)).Scaled(float64(TILE_WIDTH))
+}
+
+type gameMapType struct {
+  tiles [MAP_WIDTH_IN_TILES][MAP_WIDTH_IN_TILES]tile
+}
+
+func (m *gameMapType) drawableTiles() (dTiles []*tile) {
+  minCol,minRow,maxCol,maxRow := 0,0,200,200
+
+  dTiles = make([]*tile, 0, 200)
+  for i := minCol; i < maxCol; i++ {
+    for j := minRow; j < maxRow; j++ {
+      t := &m.tiles[i][j]
+      if true {
+        dTiles = append(dTiles, t)
+      }
+    }
+  }
+  return
+}
+
+func (m *gameMapType) getTileAtPos(pos pixel.Vec) *tile {
+  tileCol := uint16(math.Floor(pos.X / float64(TILE_WIDTH)))
+  tileRow := uint16(math.Floor(pos.Y / float64(TILE_WIDTH)))
+  return &m.tiles[tileCol][tileRow]
 }
 
 func (m *gameMapType) getBoundsFromTiles(t1, t2 *tile) (uint16, uint16, uint16, uint16) {

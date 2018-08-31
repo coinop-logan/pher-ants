@@ -7,6 +7,7 @@ import (
 type command interface {
   controlAnt(a *ant)
   rightClick(pos pixel.Vec)
+  drawOnTile(t pixel.Target, ti *tile)
 }
 
 type moveCommand struct {

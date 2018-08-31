@@ -27,6 +27,5 @@ type gameEntity interface {
 }
 
 type pheremone struct {
-  gameEntity
   command command
 }
