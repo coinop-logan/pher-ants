@@ -27,13 +27,13 @@ func main() {
 
     generatePictures()
 
-    fps := time.Tick(time.Second / 120)
+    fps := time.Tick(time.Second / 60)
 
-    newAnt := ant{
-      pos: pixel.V(50,50),
+    for i := 5; i<6; i++ {
+      newAnt := new(ant)
+      newAnt.pos = pixel.V(50*float64(i),50)
+      gameEntities = append(gameEntities, newAnt)
     }
-
-    gameEntities = append(gameEntities, &newAnt)
 
   	for !win.Closed() {
       handleInput(win)

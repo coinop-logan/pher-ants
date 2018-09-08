@@ -14,11 +14,6 @@ const (
   DOWNRIGHT = 5
   RIGHT =     6
   UPRIGHT =   7
-
-  ANT_TURNING_SPEED =        0.1
-  ANT_FORWARD_ACCELERATION = 0.1
-  ANT_BRAKE_DECELERATION =   0.2
-  ANT_SPEED_MAX =            1.0
 )
 
 type gameEntity interface {

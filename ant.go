@@ -1,8 +1,16 @@
 package main
 
 import (
+  _ "fmt"
   "math"
   "github.com/faiface/pixel"
+)
+
+const (
+  ANT_TURNING_SPEED =        0.1
+  ANT_FORWARD_ACCELERATION = 0.1
+  ANT_BRAKE_DECELERATION =   0.2
+  ANT_SPEED_MAX =            2.0
 )
 
 type ant struct {
@@ -12,58 +20,62 @@ type ant struct {
   cmd command
 }
 
-func (ant *ant) getAngleUnitVec() pixel.Vec {
-  return pixel.V(math.Cos(ant.angle), math.Sin(ant.angle))
+func (a *ant) getAngleUnitVec() pixel.Vec {
+  return pixel.V(math.Cos(a.angle), math.Sin(a.angle))
 }
 
-func (ant *ant) moveToward(targetPos pixel.Vec) {
+func (a *ant) moveToward(targetPos pixel.Vec) {
   //turn
-  angleToTarget := targetPos.Sub(ant.pos).Angle()
-  ant.turnTowardAngle(angleToTarget)
+  angleToTarget := targetPos.Sub(a.pos).Angle()
+  a.turnTowardAngle(angleToTarget)
+  angleDifference := angleToTarget - a.angle
 
   //move
-  if math.Cos(angleToTarget) > 0 {
-    ant.moveForward()
-  }
-}
 
-func (ant *ant) moveForward() {
-  ant.speed += ANT_FORWARD_ACCELERATION
-}
-
-func (ant *ant) turnTowardAngle(targetAngle float64) {
-  if math.Sin(targetAngle - ant.angle) > 0 {
-    ant.angle += ANT_TURNING_SPEED
+  if math.Cos(angleDifference) < 0 {
+    a.brake()
   } else {
-    ant.angle -= ANT_TURNING_SPEED
+    a.moveForward()
   }
 }
 
-func (ant *ant) brake() {
-  if ant.speed > ANT_BRAKE_DECELERATION {
-    ant.speed -= ANT_BRAKE_DECELERATION
+func (a *ant) moveForward() {
+  a.speed += ANT_FORWARD_ACCELERATION
+}
+
+func (a *ant) turnTowardAngle(targetAngle float64) {
+  if math.Sin(targetAngle - a.angle) > 0 {
+    a.angle += ANT_TURNING_SPEED
   } else {
-    ant.speed = 0
+    a.angle -= ANT_TURNING_SPEED
   }
 }
 
-func (ant *ant) iterate() error {
-  onTile := gameMap.getTileAtPos(ant.pos)
+func (a *ant) brake() {
+  if a.speed > ANT_BRAKE_DECELERATION {
+    a.speed -= ANT_BRAKE_DECELERATION
+  } else {
+    a.speed = 0
+  }
+}
+
+func (a *ant) iterate() error {
+  onTile := gameMap.getTileAtPos(a.pos)
 
   if onTile.pher.command == nil{
-    //ant.brake()
+    //a.brake()
   } else {
-    ant.cmd = onTile.pher.command
+    a.cmd = onTile.pher.command
   }
 
-  if ant.cmd != nil {
-    ant.cmd.controlAnt(ant)
+  if a.cmd != nil {
+    a.cmd.controlAnt(a)
   }
 
-  if ant.speed > ANT_SPEED_MAX {
-    ant.speed = ANT_SPEED_MAX
+  if a.speed > ANT_SPEED_MAX {
+    a.speed = ANT_SPEED_MAX
   }
-  ant.pos = ant.pos.Add(ant.getAngleUnitVec().Scaled(ant.speed))
+  a.pos = a.pos.Add(a.getAngleUnitVec().Scaled(a.speed))
 
   return nil
 }
